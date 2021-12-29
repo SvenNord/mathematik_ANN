@@ -1,14 +1,14 @@
-import numpy             as np 
+import numpy as np
 import matplotlib.pyplot as plt
-import tensorflow.keras  as tfk  
+import tensorflow.keras as tfk
 
 from random import randrange
-from time   import time      # For time measuring
+from time import time      # For time measuring
 
-from networks     import SequentialNet
-from layers       import *
-from optimizers   import *
-from activations  import *
+from networks import SequentialNet
+from layers import *
+from optimizers import *
+from activations import *
 from initializers import *
 
 DATA = np.load('fashion_mnist.npz')
@@ -28,7 +28,7 @@ ct = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress',
 """
 Set up the network with our library
 """
-bs, ep, eta = 128, 10, .001
+bs, ep, eta = 128, 30, 0.001
 
 
 net = SequentialNet((1,28,28))
@@ -69,16 +69,16 @@ net_TF.add(tfk.layers.Conv2D(32, (3,3),
                              activation=activation,
                              kernel_initializer='he_uniform'))
 net_TF.add(tfk.layers.MaxPool2D(pool_size=(2,2))) 
-# =============================================================================
-# net_TF.add(tfk.layers.Conv2D(64, (3,3), 
-#                              activation=activation,
-#                              kernel_initializer='he_uniform'))
-# net_TF.add(tfk.layers.MaxPool2D(pool_size=(2,2))) 
-# =============================================================================
+net_TF.add(tfk.layers.Conv2D(64, (3,3), 
+                             activation=activation,
+                             kernel_initializer='he_uniform'))
+net_TF.add(tfk.layers.MaxPool2D(pool_size=(2,2))) 
 net_TF.add(tfk.layers.Flatten())
-net_TF.add(tfk.layers.Dense(512, activation=activation,
-                            kernel_initializer='he_uniform'))
-net_TF.add(tfk.layers.Dense(512, activation=activation,
+# =============================================================================
+# net_TF.add(tfk.layers.Dense(512, activation=activation,
+#                             kernel_initializer='he_uniform'))
+# =============================================================================
+net_TF.add(tfk.layers.Dense(2048, activation=activation,
                             kernel_initializer='he_uniform'))
 net_TF.add(tfk.layers.Dense(10, activation='softmax',
                             kernel_initializer='he_uniform'))
