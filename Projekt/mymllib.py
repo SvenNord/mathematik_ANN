@@ -13,12 +13,12 @@ import time
 
 class MnistDataset:
     def __init__(self, data):
-        self.x_train = data["x_train"].reshape(60000,28,28,1)
-        self.y_train = data["y_train"]
+        self.x_train = data["x_train"].reshape(60000,28,28,1).astype(dtype=np.float32)  # use float precision
+        self.y_train = data["y_train"].astype(dtype=np.float32)
         #print("inside class:", data["y_train"].size)
-        self.x_test = data["x_test"].reshape(10000,28,28,1)
-        self.y_test = data["y_test"]
-        self.x_train = self.x_train#/255.0
+        self.x_test = data["x_test"].reshape(10000,28,28,1).astype(dtype=np.float32)
+        self.y_test = data["y_test"].astype(dtype=np.float32)
+        self.x_train = self.x_train#/255.0 # norm to one
         self.x_test = self.x_test#/255.0
  
         
@@ -191,7 +191,7 @@ def create_model(net, summary=False):
         
     if net == 11:    # idea: more convolutional channels, less dense layer
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
-        layer = tf.keras.layers.GaussianNoise(0.05)
+        layer = tf.keras.layers.GaussianNoise(0.05) # THIS NOISE IS NOT ACTUALLY ADDED TO THE MODEL!
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
                                       kernel_initializer="he_uniform"))
         model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
@@ -203,9 +203,59 @@ def create_model(net, summary=False):
         
     if net == 12:    # idea: more convolutional channels, less dense layer
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
-        layer = tf.keras.layers.GaussianNoise(0.05)
+        model.add(tf.keras.layers.GaussianNoise(0.005)) #layer = tf.keras.layers.GaussianNoise(0.05) 
         model.add(keras.layers.Conv2D(64, (5, 5), activation=activation,
                                       kernel_initializer="he_uniform"))
+        model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+    
+    if net == 13:    # idea: 11 with more generalization
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        layer = tf.keras.layers.GaussianNoise(0.05)
+        model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+
+    if net == 14:    # idea: 11 but with more channels, less dense
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        layer = tf.keras.layers.GaussianNoise(0.05)
+        model.add(keras.layers.Conv2D(128, (3, 3), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        #model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.Dense(192, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+        
+    if net == 15:    # idea: just like 11 but with added noise
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        model.add(tf.keras.layers.GaussianNoise(0.05))
+        model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+        
+    if net == 16:    # idea: more convolutional channels, less dense layer
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        model.add(tf.keras.layers.RandomFlip())
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
                                       kernel_initializer="he_uniform"))
         model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
@@ -269,6 +319,18 @@ def train(data, params, model_number):
                   loss="categorical_crossentropy",
                   metrics=["accuracy"])
     model.fit(data.x_train, data.y_train, batch_size=params.bs, epochs=params.ep)
+    return model
+
+def train_callback(data, params, model_number, callback):
+    model = create_model(net=model_number)
+    # configure model for training
+    model.compile(optimizer=keras.optimizers.Adam(params.eta),
+                  loss="categorical_crossentropy",
+                  metrics=["accuracy"])
+    model.fit(data.x_train, data.y_train, batch_size=params.bs,
+              epochs=params.ep,
+              callbacks=[callback])
+    # maybe use history of fit!
     return model
 
 

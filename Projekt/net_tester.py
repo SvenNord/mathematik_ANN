@@ -55,20 +55,28 @@ def test_loop(data, params, model_number):
         if test_accuracy > 0.9999999:#5:
             print("Training model reched perfect accuracy after epochs:", i*params.ep)
             break
+        
+def test_callback(data, params, model_number):
+    for i in range(0,10):
+        callback = tf.keras.callbacks.EarlyStopping(
+            monitor="loss", patience=30, restore_best_weights="True")
+        model = lib.train_callback(data, params, model_number, callback)
+        test_accuracy = lib.evaluate_model(model, data, params)
 
 
 
 def main():
     # setup of hyperparameters
     bs = 128 # batchsize
-    ep = 600 # number of epochs
+    ep = 500	 # number of epochs
     eta = 0.001 # learning rate
     
-    model_number = 11
+    model_number = 15
     data = MnistDataset(np.load("datasets/fashion_mnist.npz"))
 
     params = OptimizerParameters(bs, ep, eta)
-    test_loop(data, params, model_number)
+   #test_loop(data, params, model_number)
+    test_callback(data, params, model_number)
 
         
 if __name__ == "__main__":
