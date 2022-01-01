@@ -241,7 +241,7 @@ def create_model(net, summary=False):
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
         
-    if net == 15:    # idea: just like 11 but with added noise
+    if net == 15:    # idea: just like 11 but with added noise (actually this time)
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(tf.keras.layers.GaussianNoise(0.05))
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
@@ -321,6 +321,20 @@ def train(data, params, model_number):
     model.fit(data.x_train, data.y_train, batch_size=params.bs, epochs=params.ep)
     return model
 
+# =============================================================================
+# def train_callback(data, params, model_number, callback):
+#     model = create_model(net=model_number)
+#     # configure model for training
+#     model.compile(optimizer=keras.optimizers.Adam(params.eta),
+#                   loss="categorical_crossentropy",
+#                   metrics=["accuracy"])
+#     model.fit(data.x_train, data.y_train, batch_size=params.bs,
+#               epochs=params.ep,
+#               callbacks=[callback])
+#     # maybe use history of fit!
+#     return model
+# =============================================================================
+
 def train_callback(data, params, model_number, callback):
     model = create_model(net=model_number)
     # configure model for training
@@ -329,7 +343,8 @@ def train_callback(data, params, model_number, callback):
                   metrics=["accuracy"])
     model.fit(data.x_train, data.y_train, batch_size=params.bs,
               epochs=params.ep,
-              callbacks=[callback])
+              callbacks=[callback], 
+              validation_data=(data.x_test, data.y_test))
     # maybe use history of fit!
     return model
 

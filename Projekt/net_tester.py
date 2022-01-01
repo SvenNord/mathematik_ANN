@@ -59,7 +59,7 @@ def test_loop(data, params, model_number):
 def test_callback(data, params, model_number):
     for i in range(0,10):
         callback = tf.keras.callbacks.EarlyStopping(
-            monitor="loss", patience=30, restore_best_weights="True")
+            monitor="val_accuracy", patience=30, restore_best_weights="True")
         model = lib.train_callback(data, params, model_number, callback)
         test_accuracy = lib.evaluate_model(model, data, params)
 
@@ -71,7 +71,7 @@ def main():
     ep = 500	 # number of epochs
     eta = 0.001 # learning rate
     
-    model_number = 15
+    model_number = 0
     data = MnistDataset(np.load("datasets/fashion_mnist.npz"))
 
     params = OptimizerParameters(bs, ep, eta)

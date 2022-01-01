@@ -38,7 +38,7 @@ def test_loop(data, params, model_number):
 def data_insight(data):
     print(type(data.x_train[0][0][0][0]))
     #data = data = np.arange(20).reshape(5, 4).astype(np.float32)
-    data = data.x_train[1000]
+    data = data.x_train[1]
     #layer = tf.keras.layers.Dropout(0.1)
     layer = tf.keras.layers.GaussianNoise(0.05)
     data_new = layer(data, training=True)
@@ -59,7 +59,7 @@ def main():
     ep = 1 # number of epochs
     eta = 0.002 # learning rate
     
-    model_number = 11
+    model_number = 3
     data = MnistDataset(np.load("datasets/fashion_mnist.npz"))
     params = OptimizerParameters(bs, ep, eta)
     data_insight(data)
