@@ -253,9 +253,26 @@ def create_model(net, summary=False):
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
         
-    if net == 16:    # idea: more convolutional channels, less dense layer
+    if net == 16:    # idea: net 3 with random flip
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
-        model.add(tf.keras.layers.RandomFlip())
+        #model.add(keras.layers.RandomFlip())
+        model.add(keras.layers.experimental.preprocessing.RandomFlip())
+
+        model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+        
+    if net == 17:    # idea: net 3 with random flip
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        #model.add(keras.layers.RandomFlip())
+        model.add(tf.keras.layers.GaussianNoise(0.05))
+        model.add(keras.layers.experimental.preprocessing.RandomFlip()) # in 2.7 this function is moved to normal layer
+
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
                                       kernel_initializer="he_uniform"))
         model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
