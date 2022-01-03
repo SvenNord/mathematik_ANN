@@ -281,6 +281,38 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+    if net == 18:    # idea: 3, but bigger kernel
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        model.add(keras.layers.Conv2D(64, (5, 5), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+        
+    if net == 19:    # idea: 3, but bigger kernel
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        model.add(keras.layers.Conv2D(64, (2, 2), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+        
+    if net == 20:    # idea: 3, but bigger kernel
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        model.add(keras.layers.Conv2D(64, (4, 4), activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(192*2, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
         
     
     if summary:
