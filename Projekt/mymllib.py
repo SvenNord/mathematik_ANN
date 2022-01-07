@@ -30,7 +30,7 @@ class OptimizerParameters:
 
 def create_model(net, summary=False):
     # setup of Tensorflow model
-    activation = "relu"
+    activation = lambda x: tf.keras.activations.relu(x, alpha=0.3) # leaky relu # "relu"
     model = keras.Sequential()    
     if net == 0:
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
