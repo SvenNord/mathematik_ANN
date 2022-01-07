@@ -292,7 +292,7 @@ def create_model(net, summary=False):
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
         
-    if net == 19:    # idea: 3, but bigger kernel
+    if net == 19:    # idea: 3, but smaller kernel
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(64, (2, 2), activation=activation,
                                       kernel_initializer="he_uniform"))
@@ -314,7 +314,109 @@ def create_model(net, summary=False):
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
         
-    
+    if net == 21: # 98% accuracy from kaggle https://www.kaggle.com/rutvikdeshpande/fashion-mnist-cnn-beginner-98
+        model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
+        model.add(keras.layers.Conv2D(32, (3, 3), padding="same", activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Conv2D(64, (3, 3), padding="same", activation=activation,
+                                      kernel_initializer="he_uniform"))
+        model.add(keras.layers.MaxPool2D(pool_size=(2, 2)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.Dense(128, activation=activation,
+                                     kernel_initializer="he_uniform"))
+        model.add(keras.layers.Dense(10, activation="softmax",
+                                     kernel_initializer="he_uniform"))
+    if net == 22: # 98% accuracy from kaggle https://www.kaggle.com/rutvikdeshpande/fashion-mnist-cnn-beginner-98        
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(32, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+
+    if net == 23: # kaggle, my improvements          
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(32, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 24: # double kaggle with less pooling --> Moore parameters
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(32, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        #model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        #model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+ 
     if summary:
         model.summary() # overview of nr. of parameters before training        
         
@@ -336,10 +438,18 @@ def calc_accuracy(model, x_test, y_test):
     accuracy = np.count_nonzero(guess==y_converted)/len(guess)  #
     return accuracy
 
+def calc_cce_loss(model, x_test, y_test):
+    y_tilde = model.predict(x_test)
+    cce = tf.keras.losses.CategoricalCrossentropy()
+    return cce(y_test, y_tilde).numpy()
+
+
 def evaluate_model(model, data, params):       
     # quick evaluation
-    accuracy = calc_accuracy(model, data.x_test, data.y_test)  
+    accuracy = calc_accuracy(model, data.x_test, data.y_test)
+    cce_loss = calc_cce_loss(model, data.x_test, data.y_test)
     test_accuracy = calc_accuracy(model, data.x_train, data.y_train)
+    test_cce_loss = calc_cce_loss(model, data.x_test, data.y_test)
     
     print("The accuracy of the trained model is:", accuracy)    
     
@@ -358,7 +468,11 @@ def evaluate_model(model, data, params):
         f.write(("nr. of epochs:"+ str(params.ep)+"\n"))
         f.write(("used learningrate:"+ str(params.eta)+"\n"))
         f.write("\n")
-        f.write(("Accuracy of the model in training data:"+str(test_accuracy)))
+        f.write(("Accuracy of the model in training data:"+str(test_accuracy)+"\n"))
+        f.write(("CCE loss of the model in training data:"+str(test_cce_loss)+"\n"))
+        f.write("\n")
+        f.write(("Accuracy of the model in test data:"+str(accuracy)+"\n"))
+        f.write(("CCE loss of the model in test data:"+str(cce_loss)+"\n"))
     return test_accuracy
         
 def train(data, params, model_number):
@@ -402,7 +516,12 @@ def train_callback(data, params, model_number, callback):
 
       
 
-        
+# =============================================================================
+# not used right now
+# # categories
+# ct = ['T-shirt/top', 'Trouser', 'Pullover', 'Dress',
+#       'Coat', 'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle Boot']
+# =============================================================================        
 
 
 #print('Accuracy with TensorFlow =', np.sum(guess == y_test)/100)
