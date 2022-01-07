@@ -67,6 +67,7 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 3:    # idea: more convolutional channels, less dense layer
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
@@ -77,6 +78,7 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 4:    # idea: split dense layer into two
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
@@ -89,6 +91,7 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 5:    # idea: same as 4, but another dense layer #
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
@@ -103,6 +106,7 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 6:    # idea: generalize 3 more with dropout layer
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(64, (3, 3), activation=activation,
@@ -114,6 +118,7 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 7:    # idea: generalize 3 more with dropout layer; MORE DROPOUT, Dropout everywhere!
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Dropout(0.3))
@@ -141,6 +146,7 @@ def create_model(net, summary=False):
         model.add(keras.layers.Dropout(0.1))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 9:    # idea: more convolutions () (Inspiration: Imagenet NN)
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(128, (3, 3), activation=activation,
@@ -163,7 +169,6 @@ def create_model(net, summary=False):
         #model.add(keras.layers.Dropout(0.1))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
-        
         
     if net == 10:    # idea: more convolutions () (Inspiration: Imagenet NN)
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
@@ -281,6 +286,7 @@ def create_model(net, summary=False):
                                      kernel_initializer="he_uniform"))
         model.add(keras.layers.Dense(10, activation="softmax",
                                      kernel_initializer="he_uniform"))
+        
     if net == 18:    # idea: 3, but bigger kernel
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
         model.add(keras.layers.Conv2D(64, (5, 5), activation=activation,

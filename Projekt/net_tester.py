@@ -37,6 +37,12 @@ def test_callback2(data, params, model_number):
             monitor="val_accuracy", patience=50, restore_best_weights="True")
         model = lib.train_callback(data, params, model_number, callback)
         test_accuracy = lib.evaluate_model(model, data, params)
+        
+def test_callback_quick(data, params, model_number):
+    callback = tf.keras.callbacks.EarlyStopping(
+        monitor="val_accuracy", patience=10, restore_best_weights="True")
+    model = lib.train_callback(data, params, model_number, callback)
+    test_accuracy = lib.evaluate_model(model, data, params)
 
 
 
@@ -46,11 +52,13 @@ def main():
     ep = 500 # number of epochs
     eta = 0.001 # learning rate
     
-    model_number = 24
+    model_number = 3
     data = MnistDataset(np.load("datasets/fashion_mnist.npz"))
 
     params = OptimizerParameters(bs, ep, eta)
    #test_loop(data, params, model_number)
+    for i in range(0,25):
+        test_callback_quick(data, params, i)
     test_callback(data, params, model_number)
     #test_callback2(data, params, model_number)
 
