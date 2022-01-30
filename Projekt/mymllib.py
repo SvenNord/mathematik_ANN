@@ -30,7 +30,7 @@ class OptimizerParameters:
 
 def create_model(net, summary=False):
     # setup of Tensorflow model
-    activation = lambda x: tf.keras.activations.relu(x, alpha=0.3) # leaky relu # "relu"
+    activation = "relu" # lambda x: tf.keras.activations.relu(x, alpha=0.3) # leaky relu
     model = keras.Sequential()    
     if net == 0:
         model.add(keras.Input(shape=(28, 28, 1)))  # pixels^2 * Channels
@@ -422,6 +422,124 @@ def create_model(net, summary=False):
 
         model.add(keras.layers.Dropout(0.25))
         model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 25: # 98% accuracy from kaggle https://www.kaggle.com/rutvikdeshpande/fashion-mnist-cnn-beginner-98        
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(32, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.3))
+        #model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        #model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 26: # Dense net      
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512*4, activation='relu'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(512*4, activation='relu'))
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512*4, activation='relu'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(512*4, activation='relu'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512*4, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 27: # Bigger dense net     
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512*4*4, activation='relu'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(512*4*4, activation='relu'))
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512*4*4, activation='relu'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(512*4, activation='relu'))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 28: # Kaggle, but without dropouts     
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(32, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        #model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        #model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(512, activation='relu'))
+
+        #model.add(keras.layers.Dropout(0.25))
+        model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 29: # 98% accuracy from kaggle simply bigger dense layer https://www.kaggle.com/rutvikdeshpande/fashion-mnist-cnn-beginner-98        
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(64, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            256, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128*2, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128+64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(2048, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.4))    # bigger dropout since dense layer is bigger
+        model.add(keras.layers.Dense(10, activation='softmax'))
  
     if summary:
         model.summary() # overview of nr. of parameters before training        
@@ -455,7 +573,7 @@ def evaluate_model(model, data, params):
     accuracy = calc_accuracy(model, data.x_test, data.y_test)
     cce_loss = calc_cce_loss(model, data.x_test, data.y_test)
     test_accuracy = calc_accuracy(model, data.x_train, data.y_train)
-    test_cce_loss = calc_cce_loss(model, data.x_test, data.y_test)
+    test_cce_loss = calc_cce_loss(model, data.x_train, data.y_train)
     
     print("The accuracy of the trained model is:", accuracy)    
     
