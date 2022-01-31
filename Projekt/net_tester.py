@@ -52,7 +52,7 @@ def main():
     ep = 500 # number of epochs
     eta = 0.001 # learning rate
     
-    model_number = 29
+    model_number = 30
     data = MnistDataset(np.load("datasets/fashion_mnist.npz"))
 
     params = OptimizerParameters(bs, ep, eta)

@@ -540,6 +540,32 @@ def create_model(net, summary=False):
 
         model.add(keras.layers.Dropout(0.4))    # bigger dropout since dense layer is bigger
         model.add(keras.layers.Dense(10, activation='softmax'))
+        
+    if net == 30: # 98% accuracy from kaggle simply bigger dense layer less dropout https://www.kaggle.com/rutvikdeshpande/fashion-mnist-cnn-beginner-98        
+        model.add(keras.Input(shape=(28, 28, 1)))
+        model.add(keras.layers.Conv2D(64, 3, padding='same', activation='relu',
+                  kernel_initializer='he_normal', input_shape=(28, 28, 1)))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Conv2D(
+            256, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.3))
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Conv2D(
+            128*2, 3, padding='same', activation='relu'))
+        model.add(keras.layers.Conv2D(
+            128+64, 3, padding='same', activation='relu'))
+        model.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
+
+        model.add(keras.layers.Dropout(0.4))
+        model.add(keras.layers.Flatten())
+        model.add(keras.layers.BatchNormalization())
+        model.add(keras.layers.Dense(2048, activation='relu'))
+
+        model.add(keras.layers.Dropout(0.25))    # bigger dropout since dense layer is bigger
+        model.add(keras.layers.Dense(10, activation='softmax'))
  
     if summary:
         model.summary() # overview of nr. of parameters before training        
